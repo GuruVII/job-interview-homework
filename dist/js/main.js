@@ -58,55 +58,60 @@
 	"use strict";
 
 	__webpack_require__(1);
-	var leftColumn = [];
-	var rightColumn = [];
+	var leftColumn = {};
+	var rightColumn = {};
 	var leftDiv = document.getElementById("left");
 	var rightDiv = document.getElementById("right");
 
 	var widgetInit = function widgetInit() {
-		for (var key in twoColumnsObject) {
-			if (twoColumnsObject[key]['position'] === "right") {
-				rightColumn.push(twoColumnsObject[key]);
-			} else {
-				leftColumn.push(twoColumnsObject[key]);
-			}
-		}
-		createColumns();
+	    for (var _key in twoColumnsObject) {
+	        if (twoColumnsObject[_key]['position'] === "right") {
+	            console.log("R test");
+	            rightColumn[_key] = twoColumnsObject[_key];
+	            rightDiv.innerHTML += "<div class=\"item\" id =\"" + _key + "\">" + rightColumn[_key].text + "</div>";
+	        } else {
+	            console.log("test");
+	            leftColumn[_key] = twoColumnsObject[_key];
+	            leftDiv.innerHTML += "<div class=\"item\" id =\"" + _key + "\">" + leftColumn[_key].text + "</div>";
+	        }
+	    }
+	    console.log(leftColumn);
 	};
 
 	var createColumns = function createColumns() {
-		leftColumn.forEach(function (currentValue) {
-			leftDiv.innerHTML += "<div class=\"item\">" + currentValue.text + "</div>";
-		});
-		rightColumn.forEach(function (currentValue) {
-			rightDiv.innerHTML += "<div class=\"item\">" + currentValue.text + "</div>";
-		});
+	    console.log(leftColumn);
+	    leftColumn.forEach(function (currentValue) {
+	        leftDiv.innerHTML += "<div class=\"item\" id =\"" + key + "\">" + key.text + "</div>";
+	    });
+	    rightColumn.forEach(function (currentValue) {
+	        rightDiv.innerHTML += "<div class=\"item\">" + currentValue.text + "</div>";
+	    });
 	};
 
 	//Object constructor that can accept an object of any size as an argument.
 	function TwoColumns(items) {
-		for (var key in items) {
-			this[key] = items[key];
-		}
+	    for (var _key2 in items) {
+	        this[_key2] = items[_key2];
+	    }
 	};
 
 	var twoColumnsObject = new TwoColumns({
-		itemA: {
-			text: "Item A",
-			position: "left"
-		},
-		itemB: {
-			text: "Item B",
-			position: "left"
-		},
-		itemC: {
-			text: "Item C",
-			position: "left"
-		},
-		itemD: {
-			text: "Item D",
-			position: "right"
-		}
+	    itemA: {
+	        text: "Item A",
+	        position: "left"
+	    },
+	    itemB: {
+	        text: "Item B",
+	        position: "left"
+	    },
+	    itemC: {
+	        text: "Item C",
+	        position: "left"
+	    },
+	    itemD: {
+	        text: "Item D",
+	        position: "right"
+	    }
 	});
 
 	widgetInit();
