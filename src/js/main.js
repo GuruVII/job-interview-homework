@@ -4,7 +4,7 @@ let rightColumn = {}
 const leftDiv = document.getElementById("left");
 const rightDiv = document.getElementById("right");
 
-//init function, which 
+//init function, which sorts objects on their position, assigns them to the left or rightcolumn objects and inserts HTML code onto the page
 let widgetInit = () => {
     for (let key in twoColumnsObject){
         if (twoColumnsObject[key]['position'] === "right"){
