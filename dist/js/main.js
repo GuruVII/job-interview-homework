@@ -75,7 +75,7 @@
 	        alert("State saved!");
 	    };
 	    this.Restore = function () {
-	        localStorage.setItem("save", null);
+	        localStorage.removeItem("save");
 	        alert("Defaults restored");
 	        location.reload();
 	    };
@@ -83,7 +83,7 @@
 
 	//init function, which creates the object, sorts objects inside the object on their position, assigns them to the left or right column objects and inserts HTML code onto the page
 	var widgetInit = function widgetInit() {
-	    if (localStorage.getItem("save") != "null" && undefined) {
+	    if (localStorage.getItem("save") != undefined) {
 	        twoColumnsObject = new TwoColumns(JSON.parse(localStorage.getItem("save")));
 	    } else {
 	        twoColumnsObject = new TwoColumns({

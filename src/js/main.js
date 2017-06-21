@@ -23,7 +23,7 @@ function TwoColumns(items){
         alert("State saved!")
     }
     this.Restore = () => {
-        localStorage.setItem("save", null);
+        localStorage.removeItem("save");
         alert("Defaults restored")
         location.reload();
         
@@ -33,7 +33,7 @@ function TwoColumns(items){
 
 //init function, which creates the object, sorts objects inside the object on their position, assigns them to the left or right column objects and inserts HTML code onto the page
 let widgetInit = () => {
-    if (localStorage.getItem("save") != "null" && undefined){
+    if (localStorage.getItem("save") != undefined){
         twoColumnsObject = new TwoColumns(JSON.parse(localStorage.getItem("save")));
     } else {
         twoColumnsObject = new TwoColumns({
