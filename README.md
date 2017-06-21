@@ -18,5 +18,5 @@ npm install
 npm run webpack
 ```
 
-### Basic template Source
+### Basic template source
 * https://github.com/ValentinGavan/es6-sass-webpack

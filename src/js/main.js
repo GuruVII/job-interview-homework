@@ -1,2 +1,2 @@
 require('../scss/style.scss');
-console.log("test")
+console.log("test potato 2")

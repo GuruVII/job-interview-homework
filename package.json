@@ -1,18 +1,13 @@
 {
-  "name": "es6-sass-webpack",
+  "name": "job-interview-homework",
   "version": "1.0.0",
-  "description": "ES6-SASS-Webpack starter template",
+  "description": "job-interview-homework",
   "main": "webpack.config.js",
   "scripts": {
     "start": "http-server",
     "webpack": "webpack"
   },
-  "keywords": [
-    "es6",
-    "sass",
-    "webpack"
-  ],
-  "author": "Valentin Gavan",
+  "author": "Guru VII",
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.22.2",
@@ -26,6 +21,7 @@
     "sass-loader": "^4.1.1",
     "style-loader": "^0.13.1",
     "webpack": "^1.14.0",
+    "webpack-dev-server": "^2.5.0",
     "webpack-livereload-plugin": "^0.10.0"
   }
 }

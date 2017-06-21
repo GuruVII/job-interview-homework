@@ -1,3 +1,16 @@
-body {
-	background-color: blue;
+#app {
+	width: 50%;
+	margin: 0 auto;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	#left, #right {
+		width: 25%;
+		display: flex;
+		flex-flow: column wrap;
+		justify-content: flex-start;
+		.item {
+			
+		}
+	}
 }
