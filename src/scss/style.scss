@@ -1,22 +1,38 @@
+@mixin flex-mixin($justify, $flex-flow){
+	display: flex;
+	justify-content: $justify;
+	flex-flow: $flex-flow;
+}
+
+@mixin column-items{
+	border: 1px solid black;
+	margin: 5px;
+	padding: 10px;
+}
+
 #app {
 	width: 50%;
 	margin: 0 auto;
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: space-between;
-	#left, #right {
+	@include flex-mixin(space-between, row wrap)
+	.column {
 		width: 25%;
-		display: flex;
-		flex-flow: column wrap;
-		justify-content: flex-start;
+		min-height: 250px;
+		@include flex-mixin(space-between, column wrap)
+	}
+	#left, #right {
+		@include flex-mixin(flex-start, column wrap)
 		.item {
-			border: 1px solid black;
-			margin: 5px;
-			padding: 10px;
+			@include column-items
 		}
 		.selected {
 			border: 2px solid #696969;
 			font-weight: bold;
 		}
+	}
+	#left-button, #right-button {
+		@include column-items
+	}
+	#left-button{
+		text-align: right;
 	}
 }

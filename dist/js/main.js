@@ -58,31 +58,33 @@
 	"use strict";
 
 	__webpack_require__(1);
-	var leftColumn = {};
-	var rightColumn = {};
 	var otherColumnChildren = void 0;
 	var leftDiv = document.getElementById("left");
 	var rightDiv = document.getElementById("right");
+	var moveLeft = document.getElementById("left-button");
+	var moveRight = document.getElementById("right-button");
 	var className = document.getElementsByClassName("item");
+	var selectedItems = document.getElementsByClassName("selected");
 
 	//init function, which sorts objects on their position, assigns them to the left or rightcolumn objects and inserts HTML code onto the page
 	var widgetInit = function widgetInit() {
 	    for (var key in twoColumnsObject) {
 	        if (twoColumnsObject[key]['position'] === "right") {
-	            rightColumn[key] = twoColumnsObject[key];
-	            rightDiv.innerHTML += "<div class=\"item\" id =\"" + key + "\">" + rightColumn[key].text + "</div>";
+	            rightDiv.innerHTML += "<div class=\"item\" id =\"" + key + "\">" + twoColumnsObject[key].text + "</div>";
 	        } else {
-	            leftColumn[key] = twoColumnsObject[key];
-	            leftDiv.innerHTML += "<div class=\"item\" id =\"" + key + "\">" + leftColumn[key].text + "</div>";
+	            leftDiv.innerHTML += "<div class=\"item\" id =\"" + key + "\">" + twoColumnsObject[key].text + "</div>";
 	        }
 	    };
 	    select();
+	    moveElements(moveLeft, rightDiv, "right");
+	    moveElements(moveRight, leftDiv, "left");
 	};
 
 	var select = function select() {
 	    //adds click event listeners to every element with the class "item"
 	    Array.from(className).forEach(function (element) {
 	        element.addEventListener('click', function (e) {
+	            console.log("CLICK CLICK CLICK");
 	            //removes "selected class from all elements in the other column"
 	            if (e.target.parentNode.id === "right") {
 	                otherColumnChildren = leftDiv.children;
@@ -113,6 +115,19 @@
 	        this[key] = items[key];
 	    }
 	};
+	//adds event listeners on move left and right buttons, which run a function that moves the items
+	function moveElements(button, newPosition, positionString) {
+	    button.addEventListener('click', function (e) {
+	        Array.from(selectedItems).forEach(function (element) {
+	            var selected = document.getElementById(element.id);
+	            selected.parentNode.removeChild(selected);
+	            twoColumnsObject[element.id]["position"] = positionString;
+	            newPosition.innerHTML += "<div class=\"item\" id =\"" + element.id + "\">" + twoColumnsObject[element.id].text + "</div>";
+	        });
+	        select();
+	        console.log(twoColumnsObject);
+	    });
+	}
 
 	var twoColumnsObject = new TwoColumns({
 	    itemA: {
@@ -129,6 +144,10 @@
 	    },
 	    itemD: {
 	        text: "Item D",
+	        position: "right"
+	    },
+	    itemE: {
+	        text: "Item E",
 	        position: "right"
 	    }
 	});

@@ -1,10 +1,11 @@
 require('../scss/style.scss');
-let leftColumn = {}
-let rightColumn = {}
 let otherColumnChildren
 const leftDiv = document.getElementById("left");
 const rightDiv = document.getElementById("right");
+const moveLeft = document.getElementById("left-button");
+const moveRight = document.getElementById("right-button");
 const className = document.getElementsByClassName("item");
+const selectedItems = document.getElementsByClassName("selected");
 
 
 
@@ -12,22 +13,23 @@ const className = document.getElementsByClassName("item");
 let widgetInit = () => {
     for (let key in twoColumnsObject){
         if (twoColumnsObject[key]['position'] === "right"){
-            rightColumn[key] = twoColumnsObject[key]
-            rightDiv.innerHTML += `<div class="item" id ="${key}">${rightColumn[key].text}</div>`
+            rightDiv.innerHTML += `<div class="item" id ="${key}">${twoColumnsObject[key].text}</div>`;
 
         }
         else {
-            leftColumn[key] = twoColumnsObject[key]
-            leftDiv.innerHTML += `<div class="item" id ="${key}">${leftColumn[key].text}</div>`			
+            leftDiv.innerHTML += `<div class="item" id ="${key}">${twoColumnsObject[key].text}</div>`;		
         }
     };
     select();
+    moveElements(moveLeft, rightDiv, "right");
+    moveElements(moveRight, leftDiv, "left");
 }
 
 let select = () => {
     //adds click event listeners to every element with the class "item"
     Array.from(className).forEach(function(element) {
         element.addEventListener('click', (e) => {
+            console.log("CLICK CLICK CLICK")
             //removes "selected class from all elements in the other column"
             if (e.target.parentNode.id === "right"){
                 otherColumnChildren = leftDiv.children;
@@ -60,7 +62,20 @@ function TwoColumns(items){
         this[key] = items[key]
     }
 };
-
+//adds event listeners on move left and right buttons, which run a function that moves the items
+function moveElements(button, newPosition, positionString){
+     button.addEventListener('click', (e) => {
+        Array.from(selectedItems).forEach(function(element) {
+            let selected = document.getElementById(element.id);
+            selected.parentNode.removeChild(selected);
+            twoColumnsObject[element.id]["position"] = positionString;
+            newPosition.innerHTML += `<div class="item" id ="${element.id}">${twoColumnsObject[element.id].text}</div>`
+        })
+        select();
+        console.log(twoColumnsObject);
+    })
+    
+}
 
 
 let twoColumnsObject = new TwoColumns({
@@ -80,6 +95,10 @@ let twoColumnsObject = new TwoColumns({
         text: "Item D",
         position: "right"
     },
+    itemE: {
+        text: "Item E",
+        position: "right" 
+    }
 });
 
 
