@@ -60,6 +60,7 @@
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	__webpack_require__(1);
+	var twoColumnsObject = void 0;
 	var otherColumnChildren = void 0;
 	var leftDiv = document.getElementById("left");
 	var rightDiv = document.getElementById("right");
@@ -68,8 +69,55 @@
 	var className = document.getElementsByClassName("item");
 	var selectedItems = document.getElementsByClassName("selected");
 
-	//init function, which sorts objects inside the object on their position, assigns them to the left or rightcolumn objects and inserts HTML code onto the page
+	//Object constructor that can accept an object of any size as an argument.
+	function TwoColumns(items) {
+	    var _this = this;
+
+	    for (var key in items) {
+	        this[key] = items[key];
+	    }
+	    this.GetItemPosition = function (item) {
+	        console.log("The current item position of " + _this[item].text + " is " + _this[item].position);
+	        return _this[item].position;
+	    };
+	    this.Save = function () {
+	        console.log("doing da local storate");
+	        var save = JSON.stringify(_this);
+	        localStorage.setItem("save", save);
+	    };
+	    this.Restore = function () {
+	        localStorage.setItem("save", null);
+	    };
+	};
+
+	//init function, which creates the object, sorts objects inside the object on their position, assigns them to the left or right column objects and inserts HTML code onto the page
 	var widgetInit = function widgetInit() {
+	    if (localStorage.getItem("save") != "null") {
+	        twoColumnsObject = new TwoColumns(JSON.parse(localStorage.getItem("save")));
+	    } else {
+	        twoColumnsObject = new TwoColumns({
+	            itemA: {
+	                text: "Item A",
+	                position: "left"
+	            },
+	            itemB: {
+	                text: "Item B",
+	                position: "left"
+	            },
+	            itemC: {
+	                text: "Item C",
+	                position: "left"
+	            },
+	            itemD: {
+	                text: "Item D",
+	                position: "right"
+	            },
+	            itemE: {
+	                text: "Item E",
+	                position: "right"
+	            }
+	        });
+	    }
 	    for (var key in twoColumnsObject) {
 	        //checks every property of the twoColumnsObject to see, if it is an object
 	        if (_typeof(twoColumnsObject[key]) == "object") {
@@ -83,84 +131,62 @@
 	    select();
 	    moveElements(moveLeft, rightDiv, "right");
 	    moveElements(moveRight, leftDiv, "left");
+	    saveOrDefault("Save");
+	    saveOrDefault("Restore");
 	};
 
 	var select = function select() {
 	    //adds click event listeners to every element with the class "item"
 	    Array.from(className).forEach(function (element) {
-	        element.addEventListener('click', function (e) {
-	            //removes "selected class from all elements in the other column"
-	            if (e.target.parentNode.id === "right") {
-	                otherColumnChildren = leftDiv.children;
-	            } else {
-	                otherColumnChildren = rightDiv.children;
-	            };
-	            Array.from(otherColumnChildren).forEach(function (item) {
-	                document.getElementById(item.id).classList.remove('selected');
-	            });
-	            //checks if ctrl key is beeing held
-
-
-	            if (e.ctrlKey) {
-	                document.getElementById(e.target.id).classList.toggle('selected');
-	            } else {
-	                Array.from(className).forEach(function (element) {
-	                    element.classList.remove('selected');
-	                    document.getElementById(e.target.id).classList.add('selected');
-	                });
-	            }
-	        });
+	        //removes the event listener in case it was placed on the element twice.
+	        element.removeEventListener('click', selectFunction);
+	        element.addEventListener('click', selectFunction);
 	    });
 	};
 
-	//Object constructor that can accept an object of any size as an argument.
-	function TwoColumns(items) {
-	    for (var key in items) {
-	        this[key] = items[key];
+	var selectFunction = function selectFunction(e) {
+	    var selectedDiv = document.getElementById(e.target.id);
+	    //removes "selected class from all elements in the other column"
+	    if (e.target.parentNode.id === "right") {
+	        otherColumnChildren = leftDiv.children;
+	    } else {
+	        otherColumnChildren = rightDiv.children;
+	    };
+	    Array.from(otherColumnChildren).forEach(function (item) {
+	        document.getElementById(item.id).classList.remove('selected');
+	    });
+	    //checks if ctrl key is beeing held    
+	    if (e.ctrlKey) {
+	        selectedDiv.classList.toggle('selected');
+	    } else {
+	        Array.from(className).forEach(function (element) {
+	            //this serves almost the same purpose as a classList.toggle, which cannot work in this case
+	            if (selectedDiv.classList.contains('selected') == true) {
+	                selectedDiv.classList.remove('selected');
+	            } else {
+	                element.classList.remove('selected');
+	                selectedDiv.classList.add('selected');
+	            }
+	        });
 	    }
-	    this.getItemPosition = function (item) {
-	        console.log(this[item].position);
-	    };
-	    this.Save = function () {
-	        var save = JSON.stringify(this);
-	        localStorage.setItem("saved", save);
-	    };
 	};
+
 	//adds event listeners on move left and right buttons, which run a function that deletes the item in the first column
 	//and adds it in the other. It also changes the position in the twoColumnsObject
 	//in the end it runs a function that adds event listeners to the newlycreated buttons
-	function moveElements(button, newPosition, positionString) {
+	var moveElements = function moveElements(button, newPosition, positionString) {
 	    var selected = void 0;
 	    button.addEventListener('click', function (e) {
+	        //checks if there are any items in the column with the selected class
 	        if (selectedItems.length > 0) {
 	            Array.from(selectedItems).forEach(function (element) {
 	                selected = document.getElementById(element.id);
 	                selected.parentNode.removeChild(selected);
 	                twoColumnsObject[element.id]["position"] = positionString;
 	                newPosition.innerHTML += "<div class=\"item\" id =\"" + element.id + "\">" + twoColumnsObject[element.id].text + "</div>";
-	                twoColumnsObject.getItemPosition(element.id);
-	                //this adds an event listener that adds Selected clas upon clicking the item
-	                selected.addEventListener('click', function (e) {
-	                    if (positionString == "right") {
-	                        otherColumnChildren = leftDiv.children;
-	                    } else {
-	                        otherColumnChildren = rightDiv.children;
-	                    }
-	                    Array.from(otherColumnChildren).forEach(function (item) {
-	                        document.getElementById(item.id).classList.remove('selected');
-	                    });
-	                    if (e.ctrlKey) {
-	                        document.getElementById(e.target.id).classList.toggle('selected');
-	                    } else {
-	                        Array.from(className).forEach(function (element) {
-	                            element.classList.remove('selected');
-	                            document.getElementById(e.target.id).classList.add('selected');
-	                        });
-	                    }
-	                });
+	                twoColumnsObject.GetItemPosition(element.id);
+	                select();
 	            });
-
-	            select();
 	        } else {
 	            var currentPosition = void 0;
 	            if (positionString == "right") {
@@ -168,34 +194,14 @@
 	            } else {
 	                currentPosition = "right";
 	            }
-
 	            alert("You have not selected any items in the " + currentPosition + " column. \n                Please select an item and try again");
 	        }
 	    });
-	}
+	};
 
-	var twoColumnsObject = new TwoColumns({
-	    itemA: {
-	        text: "Item A",
-	        position: "left"
-	    },
-	    itemB: {
-	        text: "Item B",
-	        position: "left"
-	    },
-	    itemC: {
-	        text: "Item C",
-	        position: "left"
-	    },
-	    itemD: {
-	        text: "Item D",
-	        position: "right"
-	    },
-	    itemE: {
-	        text: "Item E",
-	        position: "right"
-	    }
-	});
+	var saveOrDefault = function saveOrDefault(action) {
+	    document.getElementById(action).addEventListener('click', twoColumnsObject[action]);
+	};
 
 	widgetInit();
 
