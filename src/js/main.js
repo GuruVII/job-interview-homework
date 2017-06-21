@@ -9,8 +9,8 @@ const className = document.getElementsByClassName("item");
 const selectedItems = document.getElementsByClassName("selected");
 
 //Object constructor that can accept an object of any size as an argument.
-function TwoColumns(items){
-    for (let key in items){
+function TwoColumns(items) {
+    for (let key in items) {
         this[key] = items[key]
     }
     this.GetItemPosition = (item) => {
@@ -26,14 +26,14 @@ function TwoColumns(items){
         localStorage.removeItem("save");
         alert("Defaults restored")
         location.reload();
-        
+
     }
 };
 
 
 //init function, which creates the object, sorts objects inside the object on their position, assigns them to the left or right column objects and inserts HTML code onto the page
 let widgetInit = () => {
-    if (localStorage.getItem("save") != undefined){
+    if (localStorage.getItem("save") != undefined) {
         twoColumnsObject = new TwoColumns(JSON.parse(localStorage.getItem("save")));
     } else {
         twoColumnsObject = new TwoColumns({
@@ -55,22 +55,23 @@ let widgetInit = () => {
             },
             itemE: {
                 text: "Item E",
-                position: "right" 
+                position: "right"
             }
         });
     }
-    for (let key in twoColumnsObject){
+    for (let key in twoColumnsObject) {
         //checks every property of the twoColumnsObject to see, if it is an object
-        if (typeof twoColumnsObject[key] == "object"){
-            if (twoColumnsObject[key]['position'] === "right"){
+        if (typeof twoColumnsObject[key] == "object") {
+            if (twoColumnsObject[key]['position'] === "right") {
                 rightDiv.innerHTML += `<div class="item" id ="${key}">${twoColumnsObject[key].text}</div>`;
 
             } else {
-                leftDiv.innerHTML += `<div class="item" id ="${key}">${twoColumnsObject[key].text}</div>`;      
+                leftDiv.innerHTML += `<div class="item" id ="${key}">${twoColumnsObject[key].text}</div>`;
             }
         }
     };
     select();
+    //where it will move, id of current DIV and current position
     moveElements(moveLeft, rightDiv, "right");
     moveElements(moveRight, leftDiv, "left");
     saveOrDefault("Save");
@@ -80,37 +81,37 @@ let widgetInit = () => {
 let select = () => {
     //adds click event listeners to every element with the class "item"
     Array.from(className).forEach(function(element) {
-            //removes the event listener in case it was placed on the element twice.
-            element.removeEventListener('click', selectFunction);
-            element.addEventListener('click', selectFunction);
+        //removes the event listener in case it was placed on the element twice.
+        element.removeEventListener('click', selectFunction);
+        element.addEventListener('click', selectFunction);
     });
 }
 
 let selectFunction = (e) => {
     let selectedDiv = document.getElementById(e.target.id)
     //removes "selected class from all elements in the other column"
-    if (e.target.parentNode.id === "right"){
+    if (e.target.parentNode.id === "right") {
         otherColumnChildren = leftDiv.children;
     } else {
         otherColumnChildren = rightDiv.children;
     };
-    Array.from(otherColumnChildren).forEach(function(item){
+    Array.from(otherColumnChildren).forEach(function(item) {
         document.getElementById(item.id).classList.remove('selected');
     });
     //checks if ctrl key is beeing held    
-    if (e.ctrlKey){
+    if (e.ctrlKey) {
         selectedDiv.classList.toggle('selected')
     } else {
         Array.from(className).forEach(function(element) {
             //this serves almost the same purpose as a classList.toggle, which cannot work in this case
-            if (selectedDiv.classList.contains('selected') == true){
+            if (selectedDiv.classList.contains('selected') == true) {
                 selectedDiv.classList.remove('selected');
             } else {
                 element.classList.remove('selected');
                 selectedDiv.classList.add('selected');
             }
         })
-    }             
+    }
 }
 
 
@@ -119,11 +120,24 @@ let selectFunction = (e) => {
 //adds event listeners on move left and right buttons, which run a function that deletes the item in the first column
 //and adds it in the other. It also changes the position in the twoColumnsObject
 //in the end it runs a function that adds event listeners to the newlycreated buttons
-let moveElements = (button, newPosition, positionString) =>{
-    let selected
+let moveElements = (button, newPosition, positionString) => {
+    let selected;
+    //we check if selectedItems exists and then check if what is inside is infact in selected in the correct column
+    let errorCatching = () => {
+        if (selectedItems[0] != undefined) {
+            if (twoColumnsObject[selectedItems[0].id].position != positionString) {
+                return true
+            } else {
+                return false
+            }
+        } else {
+            return true
+        }
+    }
+
     button.addEventListener('click', (e) => {
-        //checks if there are any items in the column with the selected class
-        if (selectedItems.length > 0){
+        //an addition to the errorCatching function, we also check if there is anything in selectedItems
+        if (errorCatching() && selectedItems.length > 0) {
             Array.from(selectedItems).forEach(function(element) {
                 selected = document.getElementById(element.id);
                 selected.parentNode.removeChild(selected);
@@ -133,8 +147,8 @@ let moveElements = (button, newPosition, positionString) =>{
                 select();
             })
         } else {
-            let currentPosition 
-            if (positionString == "right"){
+            let currentPosition
+            if (positionString == "right") {
                 currentPosition = "left";
             } else {
                 currentPosition = "right";
@@ -142,8 +156,8 @@ let moveElements = (button, newPosition, positionString) =>{
             alert(`You have not selected any items in the ${currentPosition} column. 
                 Please select an item and try again`)
         }
-            })
-    
+    })
+
 }
 
 let saveOrDefault = (action) => {

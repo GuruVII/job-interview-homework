@@ -120,6 +120,7 @@
 	        }
 	    };
 	    select();
+	    //where it will move, id of current DIV and current position
 	    moveElements(moveLeft, rightDiv, "right");
 	    moveElements(moveRight, leftDiv, "left");
 	    saveOrDefault("Save");
@@ -167,9 +168,22 @@
 	//in the end it runs a function that adds event listeners to the newlycreated buttons
 	var moveElements = function moveElements(button, newPosition, positionString) {
 	    var selected = void 0;
+	    //we check if selectedItems exists and then check if what is inside is infact in selected in the correct column
+	    var errorCatching = function errorCatching() {
+	        if (selectedItems[0] != undefined) {
+	            if (twoColumnsObject[selectedItems[0].id].position != positionString) {
+	                return true;
+	            } else {
+	                return false;
+	            }
+	        } else {
+	            return true;
+	        }
+	    };
+
 	    button.addEventListener('click', function (e) {
-	        //checks if there are any items in the column with the selected class
-	        if (selectedItems.length > 0) {
+	        //an addition to the errorCatching function, we also check if there is anything in selectedItems
+	        if (errorCatching() && selectedItems.length > 0) {
 	            Array.from(selectedItems).forEach(function (element) {
 	                selected = document.getElementById(element.id);
 	                selected.parentNode.removeChild(selected);
