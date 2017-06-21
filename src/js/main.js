@@ -18,7 +18,6 @@ function TwoColumns(items){
         return this[item].position;
     }
     this.Save = () => {
-        console.log("doing da local storate")
         let save = JSON.stringify(this);
         localStorage.setItem("save", save);
     }

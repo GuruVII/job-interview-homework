@@ -81,7 +81,6 @@
 	        return _this[item].position;
 	    };
 	    this.Save = function () {
-	        console.log("doing da local storate");
 	        var save = JSON.stringify(_this);
 	        localStorage.setItem("save", save);
 	    };
