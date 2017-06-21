@@ -60,6 +60,7 @@
 	__webpack_require__(1);
 	var leftColumn = {};
 	var rightColumn = {};
+	var otherColumnChildren = void 0;
 	var leftDiv = document.getElementById("left");
 	var rightDiv = document.getElementById("right");
 	var className = document.getElementsByClassName("item");
@@ -68,19 +69,32 @@
 	var widgetInit = function widgetInit() {
 	    for (var key in twoColumnsObject) {
 	        if (twoColumnsObject[key]['position'] === "right") {
-	            console.log("R test");
 	            rightColumn[key] = twoColumnsObject[key];
 	            rightDiv.innerHTML += "<div class=\"item\" id =\"" + key + "\">" + rightColumn[key].text + "</div>";
 	        } else {
-	            console.log("test");
 	            leftColumn[key] = twoColumnsObject[key];
 	            leftDiv.innerHTML += "<div class=\"item\" id =\"" + key + "\">" + leftColumn[key].text + "</div>";
 	        }
-	    }
-	    //looks for click on element with the class "item"
+	    };
+	    select();
+	};
+
+	var select = function select() {
+	    //adds click event listeners to every element with the class "item"
 	    Array.from(className).forEach(function (element) {
 	        element.addEventListener('click', function (e) {
-
+	            //removes "selected class from all elements in the other column"
+	            if (e.target.parentNode.id === "right") {
+	                otherColumnChildren = leftDiv.children;
+	            } else {
+	                otherColumnChildren = rightDiv.children;
+	            };
+	            Array.from(otherColumnChildren).forEach(function (item) {
+	                document.getElementById(item.id).classList.remove('selected');
+	            });
+	            //checks if ctrl key is beeing held
+	            //if it is you can add/remove the selected class from the elements with class "item"
+	            //if not, it removes the selected class from everything and gives it to one element
 	            if (e.ctrlKey) {
 	                document.getElementById(e.target.id).classList.toggle('selected');
 	            } else {
@@ -91,10 +105,6 @@
 	            }
 	        });
 	    });
-	};
-
-	var select = function select() {
-	    console.log("id");
 	};
 
 	//Object constructor that can accept an object of any size as an argument.
