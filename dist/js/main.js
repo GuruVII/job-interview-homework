@@ -62,36 +62,45 @@
 	var rightColumn = {};
 	var leftDiv = document.getElementById("left");
 	var rightDiv = document.getElementById("right");
+	var className = document.getElementsByClassName("item");
 
+	//init function, which sorts objects on their position, assigns them to the left or rightcolumn objects and inserts HTML code onto the page
 	var widgetInit = function widgetInit() {
-	    for (var _key in twoColumnsObject) {
-	        if (twoColumnsObject[_key]['position'] === "right") {
+	    for (var key in twoColumnsObject) {
+	        if (twoColumnsObject[key]['position'] === "right") {
 	            console.log("R test");
-	            rightColumn[_key] = twoColumnsObject[_key];
-	            rightDiv.innerHTML += "<div class=\"item\" id =\"" + _key + "\">" + rightColumn[_key].text + "</div>";
+	            rightColumn[key] = twoColumnsObject[key];
+	            rightDiv.innerHTML += "<div class=\"item\" id =\"" + key + "\">" + rightColumn[key].text + "</div>";
 	        } else {
 	            console.log("test");
-	            leftColumn[_key] = twoColumnsObject[_key];
-	            leftDiv.innerHTML += "<div class=\"item\" id =\"" + _key + "\">" + leftColumn[_key].text + "</div>";
+	            leftColumn[key] = twoColumnsObject[key];
+	            leftDiv.innerHTML += "<div class=\"item\" id =\"" + key + "\">" + leftColumn[key].text + "</div>";
 	        }
 	    }
-	    console.log(leftColumn);
+	    //looks for click on element with the class "item"
+	    Array.from(className).forEach(function (element) {
+	        element.addEventListener('click', function (e) {
+
+	            if (e.ctrlKey) {
+	                document.getElementById(e.target.id).classList.toggle('selected');
+	            } else {
+	                Array.from(className).forEach(function (element) {
+	                    element.classList.remove('selected');
+	                    document.getElementById(e.target.id).classList.add('selected');
+	                });
+	            }
+	        });
+	    });
 	};
 
-	var createColumns = function createColumns() {
-	    console.log(leftColumn);
-	    leftColumn.forEach(function (currentValue) {
-	        leftDiv.innerHTML += "<div class=\"item\" id =\"" + key + "\">" + key.text + "</div>";
-	    });
-	    rightColumn.forEach(function (currentValue) {
-	        rightDiv.innerHTML += "<div class=\"item\">" + currentValue.text + "</div>";
-	    });
+	var select = function select() {
+	    console.log("id");
 	};
 
 	//Object constructor that can accept an object of any size as an argument.
 	function TwoColumns(items) {
-	    for (var _key2 in items) {
-	        this[_key2] = items[_key2];
+	    for (var key in items) {
+	        this[key] = items[key];
 	    }
 	};
 
