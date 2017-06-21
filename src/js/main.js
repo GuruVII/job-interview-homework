@@ -4,6 +4,7 @@ let rightColumn = {}
 const leftDiv = document.getElementById("left");
 const rightDiv = document.getElementById("right");
 
+//init function, which 
 let widgetInit = () => {
     for (let key in twoColumnsObject){
         if (twoColumnsObject[key]['position'] === "right"){
@@ -21,15 +22,6 @@ let widgetInit = () => {
     console.log(leftColumn);
 }
 
-let createColumns = () => {
-    console.log(leftColumn)
-        leftColumn.forEach(function(currentValue){
-        leftDiv.innerHTML += `<div class="item" id ="${key}">${key.text}</div>`
-    });
-        rightColumn.forEach(function(currentValue){
-        rightDiv.innerHTML += `<div class="item">${currentValue.text}</div>`
-    });
-}
 
 //Object constructor that can accept an object of any size as an argument.
 function TwoColumns(items){
