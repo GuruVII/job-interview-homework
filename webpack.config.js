@@ -29,12 +29,12 @@ module.exports = {
       new ExtractTextPlugin('css/style.css', {
           allChunks: true
       }),
-      new LiveReloadPlugin({
+      /*new LiveReloadPlugin({
         appendScriptTag : true  
-      })
+      })*/
   ],
-  stats: {
-    colors: true
-  },
+  //stats: {
+    //colors: true
+  //},
   // devtool: 'source-map'
 };

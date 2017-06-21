@@ -20,9 +20,13 @@ function TwoColumns(items){
     this.Save = () => {
         let save = JSON.stringify(this);
         localStorage.setItem("save", save);
+        alert("State saved!")
     }
     this.Restore = () => {
         localStorage.setItem("save", null);
+        alert("Defaults restored")
+        location.reload();
+        
     }
 };
 
