@@ -1,15 +1,24 @@
 #app {
   width: 50%;
   margin: 0 auto;
+  min-height: 400px;
   display: flex;
   justify-content: space-between;
   flex-flow: row wrap; }
+  #app #save, #app #restore {
+    border: 1px solid black;
+    margin: 5px;
+    padding: 10px;
+    cursor: pointer; }
   #app .column {
     width: 25%;
-    min-height: 250px;
     display: flex;
     justify-content: space-between;
-    flex-flow: column wrap; }
+    flex-flow: column wrap;
+    border: 1px solid black;
+    margin: 5px;
+    padding: 10px;
+    cursor: pointer; }
   #app #left, #app #right {
     display: flex;
     justify-content: flex-start;
@@ -17,13 +26,15 @@
     #app #left .item, #app #right .item {
       border: 1px solid black;
       margin: 5px;
-      padding: 10px; }
+      padding: 10px;
+      cursor: pointer; }
     #app #left .selected, #app #right .selected {
       border: 2px solid #696969;
       font-weight: bold; }
   #app #left-button, #app #right-button {
     border: 1px solid black;
     margin: 5px;
-    padding: 10px; }
+    padding: 10px;
+    cursor: pointer; }
   #app #left-button {
     text-align: right; }

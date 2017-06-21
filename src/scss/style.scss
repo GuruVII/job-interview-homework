@@ -8,16 +8,21 @@
 	border: 1px solid black;
 	margin: 5px;
 	padding: 10px;
+	cursor: pointer;
 }
 
 #app {
 	width: 50%;
 	margin: 0 auto;
+	min-height: 400px;
 	@include flex-mixin(space-between, row wrap)
+	#save, #restore {
+		@include column-items
+	}
 	.column {
 		width: 25%;
-		min-height: 250px;
-		@include flex-mixin(space-between, column wrap)
+		@include flex-mixin(space-between, column wrap);
+		@include column-items;
 	}
 	#left, #right {
 		@include flex-mixin(flex-start, column wrap)

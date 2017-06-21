@@ -57,6 +57,8 @@
 
 	"use strict";
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 	__webpack_require__(1);
 	var otherColumnChildren = void 0;
 	var leftDiv = document.getElementById("left");
@@ -66,13 +68,16 @@
 	var className = document.getElementsByClassName("item");
 	var selectedItems = document.getElementsByClassName("selected");
 
-	//init function, which sorts objects on their position, assigns them to the left or rightcolumn objects and inserts HTML code onto the page
+	//init function, which sorts objects inside the object on their position, assigns them to the left or rightcolumn objects and inserts HTML code onto the page
 	var widgetInit = function widgetInit() {
 	    for (var key in twoColumnsObject) {
-	        if (twoColumnsObject[key]['position'] === "right") {
-	            rightDiv.innerHTML += "<div class=\"item\" id =\"" + key + "\">" + twoColumnsObject[key].text + "</div>";
-	        } else {
-	            leftDiv.innerHTML += "<div class=\"item\" id =\"" + key + "\">" + twoColumnsObject[key].text + "</div>";
+	        //checks every property of the twoColumnsObject to see, if it is an object
+	        if (_typeof(twoColumnsObject[key]) == "object") {
+	            if (twoColumnsObject[key]['position'] === "right") {
+	                rightDiv.innerHTML += "<div class=\"item\" id =\"" + key + "\">" + twoColumnsObject[key].text + "</div>";
+	            } else {
+	                leftDiv.innerHTML += "<div class=\"item\" id =\"" + key + "\">" + twoColumnsObject[key].text + "</div>";
+	            }
 	        }
 	    };
 	    select();
@@ -84,7 +89,6 @@
 	    //adds click event listeners to every element with the class "item"
 	    Array.from(className).forEach(function (element) {
 	        element.addEventListener('click', function (e) {
-	            console.log("CLICK CLICK CLICK");
 	            //removes "selected class from all elements in the other column"
 	            if (e.target.parentNode.id === "right") {
 	                otherColumnChildren = leftDiv.children;
@@ -95,8 +99,8 @@
 	                document.getElementById(item.id).classList.remove('selected');
 	            });
 	            //checks if ctrl key is beeing held
-	            //if it is you can add/remove the selected class from the elements with class "item"
-	            //if not, it removes the selected class from everything and gives it to one element
+
+
 	            if (e.ctrlKey) {
 	                document.getElementById(e.target.id).classList.toggle('selected');
 	            } else {
@@ -114,18 +118,59 @@
 	    for (var key in items) {
 	        this[key] = items[key];
 	    }
+	    this.getItemPosition = function (item) {
+	        console.log(this[item].position);
+	    };
+	    this.Save = function () {
+	        var save = JSON.stringify(this);
+	        localStorage.setItem("saved", save);
+	    };
 	};
-	//adds event listeners on move left and right buttons, which run a function that moves the items
+	//adds event listeners on move left and right buttons, which run a function that deletes the item in the first column
+	//and adds it in the other. It also changes the position in the twoColumnsObject
+	//in the end it runs a function that adds event listeners to the newlycreated buttons
 	function moveElements(button, newPosition, positionString) {
+	    var selected = void 0;
 	    button.addEventListener('click', function (e) {
-	        Array.from(selectedItems).forEach(function (element) {
-	            var selected = document.getElementById(element.id);
-	            selected.parentNode.removeChild(selected);
-	            twoColumnsObject[element.id]["position"] = positionString;
-	            newPosition.innerHTML += "<div class=\"item\" id =\"" + element.id + "\">" + twoColumnsObject[element.id].text + "</div>";
-	        });
-	        select();
-	        console.log(twoColumnsObject);
+	        if (selectedItems.length > 0) {
+	            Array.from(selectedItems).forEach(function (element) {
+	                selected = document.getElementById(element.id);
+	                selected.parentNode.removeChild(selected);
+	                twoColumnsObject[element.id]["position"] = positionString;
+	                newPosition.innerHTML += "<div class=\"item\" id =\"" + element.id + "\">" + twoColumnsObject[element.id].text + "</div>";
+	                twoColumnsObject.getItemPosition(element.id);
+	                //this adds an event listener that adds Selected clas upon clicking the item
+	                selected.addEventListener('click', function (e) {
+	                    if (positionString == "right") {
+	                        otherColumnChildren = leftDiv.children;
+	                    } else {
+	                        otherColumnChildren = rightDiv.children;
+	                    }
+	                    Array.from(otherColumnChildren).forEach(function (item) {
+	                        document.getElementById(item.id).classList.remove('selected');
+	                    });
+	                    if (e.ctrlKey) {
+	                        document.getElementById(e.target.id).classList.toggle('selected');
+	                    } else {
+	                        Array.from(className).forEach(function (element) {
+	                            element.classList.remove('selected');
+	                            document.getElementById(e.target.id).classList.add('selected');
+	                        });
+	                    }
+	                });
+	            });
+
+	            select();
+	        } else {
+	            var currentPosition = void 0;
+	            if (positionString == "right") {
+	                currentPosition = "left";
+	            } else {
+	                currentPosition = "right";
+	            }
+
+	            alert("You have not selected any items in the " + currentPosition + " column. \n                Please select an item and try again");
+	        }
 	    });
 	}
 
