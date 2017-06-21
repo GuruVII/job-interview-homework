@@ -9,3 +9,5 @@
     display: flex;
     flex-flow: column wrap;
     justify-content: flex-start; }
+    #app #left .item, #app #right .item {
+      border: 1px solid black; }

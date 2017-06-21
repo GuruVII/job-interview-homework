@@ -58,7 +58,58 @@
 	"use strict";
 
 	__webpack_require__(1);
-	console.log("test potato 2");
+	var leftColumn = [];
+	var rightColumn = [];
+	var leftDiv = document.getElementById("left");
+	var rightDiv = document.getElementById("right");
+
+	var widgetInit = function widgetInit() {
+		for (var key in twoColumnsObject) {
+			if (twoColumnsObject[key]['position'] === "right") {
+				rightColumn.push(twoColumnsObject[key]);
+			} else {
+				leftColumn.push(twoColumnsObject[key]);
+			}
+		}
+		createColumns();
+	};
+
+	var createColumns = function createColumns() {
+		leftColumn.forEach(function (currentValue) {
+			leftDiv.innerHTML += "<div class=\"item\">" + currentValue.text + "</div>";
+		});
+		rightColumn.forEach(function (currentValue) {
+			rightDiv.innerHTML += "<div class=\"item\">" + currentValue.text + "</div>";
+		});
+	};
+
+	//Object constructor that can accept an object of any size as an argument.
+	function TwoColumns(items) {
+		for (var key in items) {
+			this[key] = items[key];
+		}
+	};
+
+	var twoColumnsObject = new TwoColumns({
+		itemA: {
+			text: "Item A",
+			position: "left"
+		},
+		itemB: {
+			text: "Item B",
+			position: "left"
+		},
+		itemC: {
+			text: "Item C",
+			position: "left"
+		},
+		itemD: {
+			text: "Item D",
+			position: "right"
+		}
+	});
+
+	widgetInit();
 
 /***/ }),
 /* 1 */
