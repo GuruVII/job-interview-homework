@@ -32,7 +32,7 @@ function TwoColumns(items) {
 
 
 //INIT FUNCTION, which creates the object, sorts objects inside the object on their position, assigns them to the left or right column objects and inserts HTML code onto the page
-let widgetInit = () => {
+const widgetInit = () => {
     if (localStorage.getItem('save') != undefined) {
         twoColumnsObject = new TwoColumns(JSON.parse(localStorage.getItem('save')));
     } else {
@@ -74,11 +74,11 @@ let widgetInit = () => {
     //where it will move, id of current DIV and current position
     moveElements(moveLeft, rightDiv, 'right');
     moveElements(moveRight, leftDiv, 'left');
-    saveOrDefault('Save');
-    saveOrDefault('Restore');
+    addEventListenerForAction('Save');
+    addEventListenerForAction('Restore');
 };
 
-let select = () => {
+const select = () => {
     //adds click event listeners to every element with the class "item"
     Array.from(className).forEach(function(element) {
         //removes the event listener in case it was placed on the element twice.
@@ -87,8 +87,8 @@ let select = () => {
     });
 };
 
-let selectFunction = (e) => {
-    let selectedDiv = document.getElementById(e.target.id);
+const selectFunction = (e) => {
+    const selectedDiv = document.getElementById(e.target.id);
     //removes "selected class from all elements in the other column"
     if (e.target.parentNode.id === 'right') {
         otherColumnChildren = leftDiv.children;
@@ -120,10 +120,9 @@ let selectFunction = (e) => {
 //adds event listeners on move left and right buttons, which run a function that deletes the item in the first column
 //and adds it in the other. It also changes the position in the twoColumnsObject
 //in the end it runs a function that adds event listeners to the newlycreated buttons
-let moveElements = (button, newPosition, positionString) => {
-    let selected;
+const moveElements = (button, newPosition, positionString) => {
     //we check if selectedItems exists and then check if what is inside is infact in selected in the correct column
-    let errorCatching = () => {
+    const errorCatching = () => {
         if (selectedItems[0] != undefined) {
             if (twoColumnsObject[selectedItems[0].id].position != positionString) {
                 return true;
@@ -136,6 +135,7 @@ let moveElements = (button, newPosition, positionString) => {
     };
 
     button.addEventListener('click', () => {
+        let selected;
         //an addition to the errorCatching function, we also check if there is anything in selectedItems
         if (errorCatching() && selectedItems.length > 0) {
             Array.from(selectedItems).forEach(function(element) {
@@ -159,8 +159,7 @@ let moveElements = (button, newPosition, positionString) => {
     });
 
 };
-
-let saveOrDefault = (action) => {
+const addEventListenerForAction = (action) => {
     document.getElementById(action).addEventListener('click', twoColumnsObject[action]);
 };
 
