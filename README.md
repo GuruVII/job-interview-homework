@@ -17,7 +17,10 @@ npm install
 ```bash
 npm run webpack
 ```
-## Special Note
+### The outer divs appear, but there is nothing inside
+I've enouctered this problem once and I've failed to reacreate it, but clicking RESTORE DEFAULTS fixed it for me.
+
+### Special Note
 currently liverealoding is disabled, if you wish it to work, you have to go into the webpack.config.js and uncomment LiveReload and stats
 
 ## Demo
